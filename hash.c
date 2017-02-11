@@ -66,12 +66,14 @@ int insert(dir* d , int n)
 			return insert(d , n) ;
 		}
 		else
-		{
+		{			
 			int new_id = extract_bits(hash , dst -> local_depth) + pow_2(dst -> local_depth) ;
+			int i = new_id ;
 			bucket* new = create_bucket(dst -> local_depth + 1) ;
 			d -> buckets[new_id] = new ;//repeated code
-			if(new_id + pow_2(new -> local_depth) < pow_2(d -> global_depth))
-				d -> buckets[new_id + pow_2(new -> local_depth)] = new ;
+			for( ; i < pow_2(d -> global_depth) ; i++)
+				if(extract_bits(i , new -> local_depth) == new_id)
+					d -> buckets[i] = new ;
 			int t = extract_bits(hash , dst -> local_depth) + pow_2(dst -> local_depth) ;
 			dst -> local_depth++ ;//repeated code
 			int copy[bucket_size] ;//repeated code
