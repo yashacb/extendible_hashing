@@ -118,11 +118,20 @@ int lazy_delete(dir* d , int val)
 
 int merge_buckets(dir* d , int val)
 {
-	int bid = lazy_delete(d , val) ;
+	int i = 0 , bid = lazy_delete(d , val) ;
 	bucket* cur = d -> buckets[bid] ;
 	if(cur -> count == 0)
 	{
-		
+		//can be optimised . Point all the buckets which point to bid to the bucket to which bid is being merged with.
+		int num_dir = pow_2(d -> global_depth) ;
+		int merge_to ;
+		if(bid - pow_2(cur -> local_depth - 1) >= 0)
+			merge_to = bid - pow_2(cur -> local_depth - 1) ;
+		else
+			merge_to = bid + pow_2(cur -> local_depth - 1) ;
+		free(cur) ;
+		d -> buckets[bid] = d -> buckets[merge_to] ;
+		d -> buckets[merge_to] -> local_depth-- ;
 	}
 	return bid ;
 }
@@ -134,5 +143,7 @@ int delete(dir* d , int val)
 		case LAZY :
 			return lazy_delete(d , val) ;
 			break ;
+		case MERGE_BUCKETS :
+			return merge_buckets(d , val) ;
 	}
 }
