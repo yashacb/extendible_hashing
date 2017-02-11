@@ -7,3 +7,7 @@ insert 5
 insert 6
 insert 7
 status
+delete 1
+status
+delete 5
+status

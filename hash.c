@@ -118,22 +118,34 @@ int lazy_delete(dir* d , int val)
 	return bid ;
 }
 
+int mirror(dir* d , int of)
+{
+	bucket* cur = d -> buckets[of] ;
+	int offset = pow_2(cur -> local_depth - 1) ;
+	if(of - offset >= 0)
+		return of - offset ;
+	return of + offset ;
+}
+
 int merge_buckets(dir* d , int val)
 {
 	int i = 0 , bid = lazy_delete(d , val) ;
+	int num_dir = pow_2(d -> global_depth) ;
 	bucket* cur = d -> buckets[bid] ;
 	if(cur -> count == 0)
 	{
-		//can be optimised . Point all the buckets which point to bid to the bucket to which bid is being merged with.
+		//Point all the buckets which point to bid to the bucket to which bid is being merged with.
 		int num_dir = pow_2(d -> global_depth) ;
-		int merge_to ;
-		if(bid - pow_2(cur -> local_depth - 1) >= 0)
-			merge_to = bid - pow_2(cur -> local_depth - 1) ;
-		else
-			merge_to = bid + pow_2(cur -> local_depth - 1) ;
-		free(cur) ;
+		int merge_to = mirror(d , bid) ;
 		d -> buckets[bid] = d -> buckets[merge_to] ;
-		d -> buckets[merge_to] -> local_depth-- ;
+		int i = 0 ;
+		for( ; i < num_dir ; i++)
+		{
+			if(extract_bits(i , cur -> local_depth) == bid)
+				d -> buckets[i] = d -> buckets[merge_to] ;
+		}
+		d -> buckets[bid] -> local_depth-- ;
+		free(cur) ;
 	}
 	return bid ;
 }
