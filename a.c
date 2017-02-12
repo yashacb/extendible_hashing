@@ -10,6 +10,7 @@ int main(int argc , char* argv[])
 {	
 	initial_gd = atoi(argv[1]) ;
 	bucket_size = atoi(argv[2]) ;
+	delete_type = atoi(argv[3]) ;
 	dir* d = create_directory(initial_gd) ;
 	int val ;
 	char first = fgetc(stdin) ;
@@ -30,7 +31,7 @@ int main(int argc , char* argv[])
 					if(found == -1)
 						printf("%d not found .\n" , val) ;
 					else
-						printf("%d found in bucket %d\n", val , found);
+						printf("%d found in bucket %d .\n", val , found);
 				}
 				else
 				{
@@ -39,7 +40,12 @@ int main(int argc , char* argv[])
 				}
 				break ;
 			case 'd' :
-				/*do delete*/ ;
+				scanf("elete %d" , &val) ;
+				int found = delete(d , val) ;
+				if(found == -1)
+					printf("%d not found .\n" , val) ;
+				else
+					printf("%d deleted from bucket %d .\n", val , found);
 				break ;
 			case EOF :
 				exit(0) ;

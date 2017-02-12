@@ -1,5 +1,10 @@
+#define LAZY 0
+#define MERGE_BUCKETS 1
+#define COMPRESS_DIRECTORIES 2
+
 int initial_gd ;
 int bucket_size ;
+int delete_type ;
 
 typedef struct bucket
 {

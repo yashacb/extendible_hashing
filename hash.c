@@ -95,3 +95,44 @@ int search(dir* d , int val)
 	}
 	return -1 ;
 }
+
+int lazy_delete(dir* d , int val)
+{
+	int bid = search(d , val) ;
+	if(bid == -1)
+		return -1 ;
+	bucket* cur = d -> buckets[bid] ;
+	int i = 0 ; 
+	for( ; i < cur -> count ; i++)
+		if(cur -> list[i] == val)
+			break ;
+	if(cur -> count == 1)
+		cur -> count-- ;
+	else
+	{
+		cur -> list[i] = cur -> list[cur -> count - 1] ;
+		cur -> count-- ;
+	}
+	return bid ;
+}
+
+int merge_buckets(dir* d , int val)
+{
+	int bid = lazy_delete(d , val) ;
+	bucket* cur = d -> buckets[bid] ;
+	if(cur -> count == 0)
+	{
+		
+	}
+	return bid ;
+}
+
+int delete(dir* d , int val)
+{
+	switch(delete_type)
+	{
+		case LAZY :
+			return lazy_delete(d , val) ;
+			break ;
+	}
+}

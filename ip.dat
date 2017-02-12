@@ -2,7 +2,6 @@ insert 16
 insert 8
 insert 4
 search 17
-status
 insert 17
 insert 9
 insert 5
@@ -12,4 +11,10 @@ insert 3
 search 16
 insert 15
 insert 6
+insert 2
+insert 14
+search 143
+status
+delete 6
+delete 14
 status 
