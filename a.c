@@ -18,15 +18,25 @@ int main(int argc , char* argv[])
 		switch(first)
 		{
 			case 'i' :
-				scanf("nsert %d" , &val) ;
+				scanf("nsert %d\n" , &val) ;
 				insert(d , val) ;
 				break ;
 			case 's' :
 				first = getchar() ;
 				if(first == 'e')
-					/*do search */ ;
+				{
+					scanf("arch %d\n" , &val) ;
+					int found = search(d , val) ;
+					if(found == -1)
+						printf("%d not found .\n" , val) ;
+					else
+						printf("%d found in bucket %d\n", val , found);
+				}
 				else
+				{
+					scanf("atus\n") ;
 					status(d) ;
+				}
 				break ;
 			case 'd' :
 				/*do delete*/ ;

@@ -3,7 +3,6 @@ int bucket_size ;
 
 typedef struct bucket
 {
-	int printed ;
 	int local_depth ;
 	int count ; // number of elements currently in the bucket .
 	int *list ;

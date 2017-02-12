@@ -8,18 +8,19 @@ void status(dir* d)
 	printf("---------------------------------------------------\n");
 	printf("Global depth : %d\n" , d -> global_depth);
 	int i = 0 , num_dir = pow_2(d -> global_depth) , j = 0 ;
-	for(j = 0 ; j < num_dir ; j++)
-		d -> buckets[j] -> printed = 0 ;
+	int check[num_dir] ;
+	memset(check , 0 , num_dir*(sizeof (int))) ;
 	for( ; i < num_dir ; i++)
 	{
 		bucket* cur = d -> buckets[i] ;
-		if(cur -> printed == 0)
+		int bid = extract_bits(i , cur -> local_depth) ;
+		if(!check[bid])
 		{
-			printf("Bucket %d : %d : ", extract_bits(i , cur -> local_depth) , cur -> local_depth) ;
+			printf("Bucket %d : Local depth : %d : ", bid , cur -> local_depth) ;
 			for(j = 0 ; j < cur -> count ; j++)
 				printf("%d ", cur -> list[j]) ;
 			printf("\n") ;
-			cur -> printed = 1 ;
+			check[bid] = 1 ;
 		}
 	}
 	printf("---------------------------------------------------\n");
@@ -66,8 +67,11 @@ int insert(dir* d , int n)
 		}
 		else
 		{
+			int new_id = extract_bits(hash , dst -> local_depth) + pow_2(dst -> local_depth) ;
 			bucket* new = create_bucket(dst -> local_depth + 1) ;
-			d -> buckets[extract_bits(hash , dst -> local_depth) + pow_2(dst -> local_depth)] = new ;//repeated code
+			d -> buckets[new_id] = new ;//repeated code
+			if(new_id + pow_2(new -> local_depth) < pow_2(d -> global_depth))
+				d -> buckets[new_id + pow_2(new -> local_depth)] = new ;
 			int t = extract_bits(hash , dst -> local_depth) + pow_2(dst -> local_depth) ;
 			dst -> local_depth++ ;//repeated code
 			int copy[bucket_size] ;//repeated code
@@ -78,4 +82,16 @@ int insert(dir* d , int n)
 			return insert(d , n) ;
 		}
 	}
+}
+
+int search(dir* d , int val)
+{
+	int hash = extract_bits(hash_function(val) , d -> global_depth) , i = 0 ;
+	bucket* b = d -> buckets[hash] ;
+	for(i = 0 ; i < b -> count ; i++)
+	{
+		if(b -> list[i] == val)
+			return hash ;
+	}
+	return -1 ;
 }
