@@ -20,7 +20,8 @@ int main(int argc , char* argv[])
 		{
 			case 'i' :
 				scanf("nsert %d\n" , &val) ;
-				insert(d , val) ;
+				int add = insert(d , val) ;
+				printf("Inserted %d into bucket %d\n", val , add);
 				break ;
 			case 's' :
 				first = getchar() ;

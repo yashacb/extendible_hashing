@@ -1,6 +1,29 @@
-insert 16
-insert 8
+insert 2
 insert 4
-status
-delete 4
+insert 6
+insert 8
+insert 10
+insert 12
+insert 14
+insert 16
+insert 18
+insert 20
+insert 22
+insert 24
+insert 26
+insert 28
+insert 30
+insert 32
+insert 34
+insert 36
+insert 38
+insert 40
+insert 42
+insert 44
+insert 46
+insert 48
+insert 50
+insert 1
+insert 3
+insert 5
 status

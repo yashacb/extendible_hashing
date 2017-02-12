@@ -43,3 +43,12 @@ int hash_function(int x)
 	// implementation of hash function . Currently , it is identity .
 	return x ;
 }
+
+void wbptw(dir* d)//which bucket points to what
+{
+	int i = 0 , num_dir = pow_2(d -> global_depth) ;
+	for( ; i < num_dir ; i++)
+	{
+		printf("Directory entry %3d maps to bucket %3d\n", i , extract_bits(i , d -> buckets[i] -> local_depth));
+	}
+}

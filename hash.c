@@ -1,7 +1,6 @@
 #include "hash.h"
 
 extern int bucket_size ;
-extern int hash_function(int x) ;
 
 void status(dir* d)
 {
@@ -51,7 +50,7 @@ void double_dir(dir* d , int overflow)
 
 int insert(dir* d , int n)
 {
-	int hash = extract_bits(hash_function(n) , d -> global_depth) , i ;
+	int hash = extract_bits(n , d -> global_depth) , i ;
 	bucket* dst = d -> buckets[hash] ;
 	if(dst -> count != bucket_size)		
 	{
@@ -88,7 +87,7 @@ int insert(dir* d , int n)
 
 int search(dir* d , int val)
 {
-	int hash = extract_bits(hash_function(val) , d -> global_depth) , i = 0 ;
+	int hash = extract_bits(val , d -> global_depth) , i = 0 ;
 	bucket* b = d -> buckets[hash] ;
 	for(i = 0 ; i < b -> count ; i++)
 	{
