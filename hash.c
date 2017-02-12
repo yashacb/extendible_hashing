@@ -122,31 +122,71 @@ int mirror(dir* d , int of)
 {
 	bucket* cur = d -> buckets[of] ;
 	int offset = pow_2(cur -> local_depth - 1) ;
-	if(of - offset >= 0)
+	if(of - offset >= 0 && d -> buckets[of - offset] -> local_depth == cur -> local_depth)
 		return of - offset ;
-	return of + offset ;
+	if(of + offset < pow_2(d -> global_depth) && d -> buckets[of + offset] -> local_depth == cur -> local_depth)
+		return of + offset ;
+	return -1 ;
+}
+
+//Merges bid with it's mirror if number of elements in bid is zero
+int attempt_merge(dir* d , int bid)
+{
+	int num_dir = pow_2(d -> global_depth) ;
+	bucket* cur = d -> buckets[bid] ;
+	if(cur -> count == 0 && cur -> local_depth != 1)
+	{
+		//Point all the buckets which point to bid to the bucket to which bid is being merged with.
+		int merge_to = mirror(d , bid) ;
+		if(merge_to == -1)//Invalid mirror
+			return 0 ; 
+		d -> buckets[bid] = d -> buckets[merge_to] ;
+		int i = 0 ;
+		for( ; i < num_dir ; i++)
+		{
+			if(extract_bits(i , cur -> local_depth) == extract_bits(bid , cur -> local_depth))
+			{
+				d -> buckets[i] = d -> buckets[merge_to] ;
+			}
+		}
+		d -> buckets[bid] -> local_depth-- ;
+		free(cur) ;
+		return 1 ; //Merge was successful
+	}
+	return 0 ; //No merge took place
 }
 
 int merge_buckets(dir* d , int val)
 {
 	int i = 0 , bid = lazy_delete(d , val) ;
 	int num_dir = pow_2(d -> global_depth) ;
-	bucket* cur = d -> buckets[bid] ;
-	if(cur -> count == 0)
+	for( ; i < num_dir ; i++)
 	{
-		//Point all the buckets which point to bid to the bucket to which bid is being merged with.
-		int num_dir = pow_2(d -> global_depth) ;
-		int merge_to = mirror(d , bid) ;
-		d -> buckets[bid] = d -> buckets[merge_to] ;
-		int i = 0 ;
-		for( ; i < num_dir ; i++)
-		{
-			if(extract_bits(i , cur -> local_depth) == bid)
-				d -> buckets[i] = d -> buckets[merge_to] ;
-		}
-		d -> buckets[bid] -> local_depth-- ;
-		free(cur) ;
+		if(d -> buckets[i] -> count == 0)
+			attempt_merge(d , i) ;
 	}
+	return bid ;
+}
+
+int attempt_compress(dir* d)
+{
+	if(d -> global_depth < 2)
+		return 0 ;//The dir cannot be compressed
+	int i = 0 , num_dir = pow_2(d -> global_depth) ;
+	for( ; i < num_dir ; i++)
+	{
+		if(d -> buckets[i] -> local_depth == d -> global_depth)
+			return 0 ;
+	}
+	d -> buckets = realloc(d -> buckets , (num_dir / 2) * (sizeof(bucket *))) ;
+	d -> global_depth-- ;
+	return 1 ;
+}
+
+int compress_dir(dir* d , int val)
+{
+	int bid = merge_buckets(d , val) ;
+	while(attempt_compress(d)) ;
 	return bid ;
 }
 
@@ -159,5 +199,7 @@ int delete(dir* d , int val)
 			break ;
 		case MERGE_BUCKETS :
 			return merge_buckets(d , val) ;
+		case COMPRESS_DIRECTORY :
+			return compress_dir(d , val) ;
 	}
 }

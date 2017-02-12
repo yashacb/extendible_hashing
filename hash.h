@@ -5,3 +5,7 @@ int search(dir* d , int val) ;
 int delete(dir* d , int val) ;
 int merge_buckets(dir* d , int val) ;
 int lazy_delete(dir* d , int val) ;
+int mirror(dir* d , int of) ;
+int merge_buckets(dir* d , int val) ;
+int merge(dir* d , int bid) ;
+int compress_dir(dir* d , int val) ;
