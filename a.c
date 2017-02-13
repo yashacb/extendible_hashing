@@ -48,10 +48,13 @@ int main(int argc , char* argv[])
 				else
 					printf("%d deleted from bucket %d .\n", val , found);
 				break ;
+			case 'm' :
+				scanf("apping") ;
+				wbptw(d) ;
+				break ;
 			case EOF :
 				exit(0) ;
 		}
 		first = fgetc(stdin) ;
-	}
-	return 0 ;
+	}	return 0 ;
 }

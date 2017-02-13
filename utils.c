@@ -46,9 +46,12 @@ int hash_function(int x)
 
 void wbptw(dir* d)//which bucket points to what
 {
+	printf("---------------------------------------------------\n");
 	int i = 0 , num_dir = pow_2(d -> global_depth) ;
 	for( ; i < num_dir ; i++)
 	{
-		printf("Directory entry %3d maps to bucket %3d\n", i , extract_bits(i , d -> buckets[i] -> local_depth));
+		printf("Directory entry %3d maps to bucket %3d . Address : %x\n", i , extract_bits(i , d -> buckets[i] -> local_depth) , 
+			(unsigned int)(d -> buckets[i]));
 	}
+	printf("---------------------------------------------------\n");
 }

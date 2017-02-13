@@ -55,7 +55,7 @@ int insert(dir* d , int n)
 	if(dst -> count != bucket_size)		
 	{
 		dst -> list[dst -> count++] = n ;
-		return hash ;
+		return extract_bits(hash , dst -> local_depth) ;
 	}
 	else
 	{
